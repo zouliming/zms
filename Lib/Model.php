@@ -1,10 +1,10 @@
 <?php
-abstract class Model{
+class Model{
     public static $_debug = false;
     public static $models = array();
     private $link = null;
     
-    abstract protected function rules();
+//    protected function rules();
     
     public static function mo($cl= __CLASS__ ){
         $className = ucfirst($cl).'Model';

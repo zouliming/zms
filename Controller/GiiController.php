@@ -19,7 +19,7 @@ class GiiController extends Controller{
      * @return Array 二维数组
      */
     public function getTableStructure($table){
-        $mo = MODEL::mo($table);
+        $mo = new Model();
         $structure = $mo->selectAll('desc `'.$table.'`');
         return $structure;
     }
@@ -76,7 +76,7 @@ class GiiController extends Controller{
         $structure = $this->getTableStructure($table);
         $rules = $this->getRules($structure);
         $content = $this->view('gii/template/model',array(
-            'className'=>  $className,
+            'className'=> $className,
             'table'=>$table,
             'rules'=>$rules
         ),'none',true);
@@ -84,11 +84,11 @@ class GiiController extends Controller{
         if(!file_exists($modelPath)){
             mkdir($modelPath);
         }
-        $fileName = ucfirst($table).'.php';
+        $fileName = $className.'.php';
         file_put_contents($modelPath.DIRECTORY_SEPARATOR.$fileName, $content);
     }
     public function actionGenerateModel(){
-        if(Bee::get('method')=='post'){
+        if(Bee::get('method')=='POST'){
             $table = $this->getPost('inputTable');
             $this->generateModel($table);
         }else{

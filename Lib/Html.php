@@ -57,8 +57,13 @@ class Html{
      */
     public static function link($title,$url,$attribute = array()){
         $h = "<a";
-        $route = array_shift($url);
-        $h .= " href=\"".self::url($route,$url)."\"";
+        if(is_array($url)){
+            $route = array_shift($url);
+            $h .= " href=\"".self::url($route,$url)."\"";
+        }else{
+            $h .= " href=\"".self::url($url)."\"";
+        }
+        
         if($attribute){
             foreach($attribute as $k=>$v){
                 $h .= " ".$k."=\"".$v."\"";

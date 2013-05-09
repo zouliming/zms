@@ -1,16 +1,10 @@
 <?php
 class AppConfig{
     //数据库配置
-//    public static $databaseSet = array(
-//        'host'=>"127.0.0.1",
-//        'username'=>"zouliming",
-//        'password'=>"caozuo",
-//        'database' => "vendorplatform",
-//    );
     public static $databaseSet = array(
-        'host'=>"10.100.90.170",
-        'username'=>"vipshop",
-        'password'=>"vipshop123",
+        'host'=>"127.0.0.1",
+        'username'=>"zouliming",
+        'password'=>"caozuo",
         'database' => "vendorplatform",
     );
     //cookie配置

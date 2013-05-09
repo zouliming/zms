@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>登录   - VIPSHOP - 供应商平台</title> 
+        <title>登录   - 我的后台</title> 
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <link rel="stylesheet" type="text/css" href="<?=CSS_URL?>bootstrap.css"/>
         <link rel="stylesheet" type="text/css" href="<?=CSS_URL?>login.css"/>
@@ -9,8 +9,8 @@
     <body>
         <div class="login_box light round tran">
             <div class="til">
-                <p class="til_china">唯品会供应商平台</p>
-                <p class="til_en">Vipshop Vendor platforms</p>
+                <p class="til_china">管理后台Demo</p>
+                <p class="til_en">By zouliming</p>
             </div>
             <div class="inf">
                 <form id="myForm" method="post" action="index.php?r=welcome/login">
@@ -56,9 +56,11 @@
                 $("#checkCode").html('<img src="index.php?r=site/img&t='+Math.random()+'"/>');
             });
             $('#subMit').click(function(){
-                $("#userName,#password,#checkWord").va({
-                    'messageEle':'m',
-                    'submitEle':'#myForm'
+                $("#myForm").va({
+                   'required':{
+                       'ele':'#userName,#password,#checkWord',
+                       'errorAttr':'placeholder'
+                   }
                 });
             });
             document.onkeydown = function(e){

@@ -12,7 +12,7 @@ class RoleModel extends Model {
     }
 
     public $tableName = "role";
-
+    
     /**
      * 返回所有角色
      */
@@ -29,9 +29,7 @@ class RoleModel extends Model {
      * 按menuId返回角色信息
      */
     public function getRoleListByMenu($menuId) {
-        $sql = "SELECT mrr.menu_id,r.* FROM menu_relation_role mrr left join ".$this->tableName . " r on (r.id=mrr.role_id)";
-
-        $sql .= " WHERE mrr.menu_id=" . $menuId;
+        $sql = "SELECT mrr.menu_id,r.* FROM menu_relation_role mrr left join ".$this->tableName . " r on (r.id=mrr.role_id) WHERE mrr.menu_id=" . $menuId;
 
         return $this->selectAll($sql);
     }

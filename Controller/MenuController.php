@@ -27,55 +27,41 @@ class MenuController extends Controller{
     public function actionRole() {
         $id = $this->getGet("id");
         if ($id == "") {
-            $id = $this->getPost("id");
-        }
-        if (intval($id) <= 0) {
-            return false;
-        }
-        $roleModel = Model::mo('Role');
-        $submit = $this->getPost("smt"); //是否表单提交
-
-        if ($submit == 1) {
-            $roles = $this->getPost("role");
-            if (empty($roles)) {
-                jsonExit(array("msg" => "至少选择一个角色", "status" => -2));
+            $this->forward('menu/index');
+        }else{
+            $allRoles = Model::mo('role')->getAllRoles();
+            $menuRoles = $this->model->getMenuRole($id);
+            $targetRoles = array();
+            foreach($allRoles as $k=>$v){
+                if(in_array($k, $menuRoles)){
+                    $targetRoles[$k] = $v;
+                    unset($allRoles[$k]);
+                }
             }
-            
-            //获取设置的$roles，逐个插入到数据表menu_relation_role
-            $data = array();
-            //拼装批量添加数组
-            foreach ($roles as $rid) {
-                $data[] = array($id, $rid);
-            }
-            
-            //删除就有列表
-            $this->model->delRoleByMenu($id);
-            //插入新数据
-            $sql = $this->model->setMenus($data);
-            jsonExit(array("msg" => "添加成功", "status" => 1));
+            $this->view('menu/role', array(
+                'srcRoles' => $allRoles,
+                'menuRoles' => $targetRoles,
+                'masterId' => $id
+            ));
         }
-        
-        $sitems = $roleModel->getRoleListByMenu($id);
-        
-        //提取已选择的roleid
-        $sids = array();
-        foreach($sitems as $i) {
-            $sids[] = $i['id'];
-        }
-
-        if(!empty($sids)) {
-            $items = $roleModel->getRoleList("id not in(".implode(",", $sids).")");
-        } else {
-            $items = $roleModel->getRoleList();
-        }
-        
-        $this->view('menu/role', array(
-            'menuid' => $id,
-            'roles' => $items,
-            'sroles' => $sitems
-        ));
     }
     
+    /**
+     * 给菜单更换角色
+     */
+    public function actionChangeRole(){
+        $menuId = $this->getPost('menuId');
+        $newRole = trim($this->getPost('newRole'),',');
+        if($menuId && $newRole){
+            $menuRelationModel = Model::mo('');
+            //先删除之前的Role
+            $this->model->delete("");
+            $this->model->update(array(
+                'role'=>$newRole
+            ),'`id`='.$masterId);
+        }
+        $this->forward('master/index');
+    }
     /**
      * 菜单添加
      */
@@ -146,12 +132,8 @@ class MenuController extends Controller{
      */
     public function actionDel(){
     	$id = $this->getGet("id");
-    	if(intval($id) <= 0) {
-    		return false;
-    	}
     	$this->model->delMenu($id);
-    	
-    	jsonExit(array("msg"=>"删除成功", "status"=>1));
+        $this->forward('menu/index');
     }
     
     /**

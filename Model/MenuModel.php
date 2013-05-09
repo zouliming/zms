@@ -21,6 +21,14 @@ class MenuModel extends Model {
     }
 
     /**
+     * 得到菜单的角色
+     * @param type $roleId
+     * @return type
+     */
+    public function getMenuRole($roleId){
+        return $this->selectCol("select role_id from menu_relation_role where menu_id=".$roleId);
+    }
+    /**
      * 返回菜单信息
      */
     public function getMenuList($where = "", $limit = '0,1000', $orderby = "id DESC") {
@@ -77,8 +85,7 @@ class MenuModel extends Model {
      * @return boolean
      */
     public function delMenu($id) {
-        $sql = "DELETE FROM " . $this->tableName . " WHERE id=" . $id;
-        $this->query($sql);
+        return $this->update(array('status'=>0), 'id='.$id);
     }
     
     /**

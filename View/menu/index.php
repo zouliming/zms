@@ -4,9 +4,7 @@
 </ul>
 <div class="main_addbtn">
     <dl>
-        <a class="all_btn" href="javascript:;" onclick="showAdd();">
-            添加菜单 
-        </a>
+        <?=html::link('添加菜单', 'menu/add',array('class'=>'all_btn'))?>
     </dl>
 </div>
 <div class="data-list">
@@ -27,8 +25,8 @@
                         <td><?= @$item['info']['name']; ?></td>
                         <td><?= @$item['info']['url']; ?></td>
                         <td>
-                            <a href="javascript:void(0);" onclick="role('<?= $item['info']['id']; ?>')">分配角色</a>
-                            <a href="javascript:void(0);" onclick="edit('<?= $item['info']['id']; ?>')">修改</a>
+                            <?=Html::link('分配角色', array('menu/role','id'=>$item['info']['id']))?>
+                            <?=Html::link('修改', array('menu/update','id'=>$item['info']['id']))?>
                             <a href="javascript:void(0);" onclick="del('<?= $item['info']['id']; ?>')">删除</a>
                         </td>
                     </tr>
@@ -41,8 +39,8 @@
                                 <td>　<?php echo $subitem['name']; ?></td>
                                 <td><?php echo $subitem['url']; ?></td>
                                 <td>
-                                    <a href="javascript:void(0);" onclick="role('<?php echo $subitem['id']; ?>')">分配角色</a>
-                                    <a href="javascript:void(0);" onclick="edit('<?php echo $subitem['id']; ?>')">修改</a>
+                                    <?=Html::link('分配角色', array('menu/role','id'=>$subitem['id']))?>
+                                    <?=Html::link('修改', array('menu/update','id'=>$subitem['id']))?>
                                     <a href="javascript:void(0);" onclick="del('<?php echo $subitem['id']; ?>')">删除</a>
                                 </td>
                             </tr>
@@ -62,66 +60,12 @@
         </tbody>
     </table>
 </div>
-<script>
-    function role(id) {
-        location.href = "?r=menu/role&id=" + id;
-    }
-    /**
-     * 弹出添加框
-     */
-    function showAdd() {
-        //VPFbox.iframe('?r=menu/add', "添加菜单项", 570, 270);
-        location.href = "?r=menu/add";
-    }
-    /**
-     * 弹出修改框
-     * @param id menuid
-     */
-    function edit(id) {
-        //VPFbox.iframe('?r=menu/update&id='+id, "修改菜单项",570, 270);
-        location.href = "?r=menu/update&id="+id;
-    }
-    /**
-     * 删除
-     * @param id menuid
-     */
+<script type="text/javascript">
     function del(id) {
-        VPFbox.confirm("确认删除此操作项吗？", function() {
-            $.getJSON('?r=menu/del',{id:id}, 
-            function(json){
-                if(json.status==1){
-                    VPFbox.alert("操作成功", function() {
-                        location.reload();
-                    });
-                } else {
-                    VPFbox.alert(json.msg);
-                }
-            }
-        );	
-        }, function() {
-            return false;
-        });
+        if(confirm('确认删除此操作项吗？')){
+            window.location.href="index.php?r=menu/del&id="+id;
+        }
     }
-    /**
-     * 弹框关闭时自动刷新页面
-     */
-    function setRefeshFlag() {
-        $(".dui-dialog-close").click(function() {
-            location.href = location.href;
-        });
-    }
-
-    $(function() {
-        $(".expSub").click(function() {
-            if($(this).hasClass("exp")) {
-                $(this).html("+").removeClass("exp");
-            } else {
-                $(this).html("-").addClass("exp");
-            }
-            $(this).parent().siblings(".subtable[rel="+$(this).attr("rel")+"]").toggle();
-        })
-    });
-
     //表格初始化
     $('#table1').tablecloth();
 </script>

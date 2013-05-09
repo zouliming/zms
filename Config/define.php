@@ -16,7 +16,7 @@ define('DEFAULT_ACTION','index');
 define('VPF_SESSION','vpfsession');
 
 define('APP_DOMAIN','zouliming.com');
-define('APP_URL','http://v.zouliming.com');
+define('APP_URL','http://zms.zouliming.com');
 define('JS_URL',APP_URL.'/js/');
 define('CSS_URL',APP_URL.'/css/');
 ?>
