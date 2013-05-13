@@ -1,10 +1,9 @@
 <?php
 class Model{
+    public $tableName;
     public static $_debug = false;
     public static $models = array();
     private $link = null;
-    
-//    protected function rules();
     
     public static function mo($cl= __CLASS__ ){
         $className = ucfirst($cl).'Model';
@@ -122,6 +121,57 @@ class Model{
         return $this->selectAll($sql);
     }
     /**
+     * 插入数据
+     * @param array $data 将要插入的数据 需要键值对应
+     * @return mixed 成功返回最新插入的数据的Id，失败返回false
+     */
+    function insert($data) {
+        if(!is_array($data) || count($data) == 0) return;
+        $cols = $values = "";
+        foreach($data as $key => $val) {
+            $values .= "'" . mysqli_real_escape_string($this->link,$val) . "',";
+            $cols .= "`" . trim($key) . "`,";
+        }
+        $cols = rtrim( $cols, ',');
+        $values = rtrim( $values, ',');
+        $sql = "INSERT INTO {$this->tableName} ({$cols}) VALUES ({$values})";
+        $result = $this->query($sql);
+        if($result){
+            return $this->lastInsertId();
+        }else{
+            return false;
+        }
+    }
+	
+    /**
+     * 插入多条表数据
+     * @param array $data 数据数组
+     * @return resource
+     */
+    function insertMany($data) {
+        if(!is_array($data) || count($data) == 0) return;
+        $values = "";
+        $keys = array_keys($data[0]);
+        $cols = implode('`,`', $keys);
+        foreach($data as $key => $val) {
+            $values .= "(";
+            foreach($val as $k=>$v) {
+                $values .= "'" . mysqli_real_escape_string($this->link,$v) . "',";
+            }
+            $values = rtrim( $values, ',');
+            $values .= "),";
+        }
+        $cols = '`'.$cols.'`';
+        $values = rtrim( $values, ',');
+        $sql = "INSERT INTO {$this->tableName} ({$cols}) VALUES {$values}";
+        $result = $this->query($sql);
+        if($result){
+            return $this->lastInsertId();
+        }else{
+            return false;
+        }
+    }
+    /**
      * 更改数据
      * @param array $data 二维数组
      * @param String $where where条件语句
@@ -150,90 +200,13 @@ class Model{
         $sql = "DELETE from ".$this->tableName." WHERE ".$where;
         return $this->execute($sql);
     }
-
     /**
-     * 取得结果数据
-     *
-     * @param resource $query
-     * @param int $row 字段的偏移量或者字段名
-     * @return mixed
+     * 
+     * 获取最近新增记录id：需紧跟insert后读取
+     * @return int $insertId , 自增id
      */
-    function result($query, $row) {
-        $query = mysql_result($query, $row);
-        return $query;
-    }
-
-    /**
-     * 取得上一步 INSERT 操作产生的 ID
-     *
-     * @return int
-     */
-    function insertId() {
-        return ($id = mysql_insert_id($this->link)) >= 0 ? $id : $this->result($this->query("SELECT last_insert_id()"), 0);
-    }
-	
-    /**
-     * 插入/加入表数据
-     *
-     * @param string $table 数据表名
-     * @param array $inlist 数据数组,数组名对应字段名
-     * @return resource
-     */
-    function insertNew($table, $inlist ,$where=null) {
-        if(!$table) return;
-        if(!is_array($inlist) || count($inlist) == 0) return;
-        foreach($inlist as $key => $val) {
-                $val=mysql_escape_string($val);
-                $set[] = "$key='$val'";
-        }
-        $SQL = "INSERT $table SET ".implode(", ", $set)." $where";
-        return $this->query($SQL);
-    }
-	
-    /**
-     * 插入多条表数据
-     *
-     * @param string $table 数据表名
-     * @param array $fields 字段数组
-     * @param array $data 数据数组
-     * @return resource
-     */
-    function insertMany($table, $fields, $data) {
-        if(!$table) return;
-        if(!is_array($data) || count($data) == 0) return;
-        foreach($data as $key => $val) {
-            foreach($val as $k=>$v) {
-                $val[$k] = "'".mysql_escape_string($v)."'";
-            }
-            $values[] = "(".implode(",", $val).")";
-        }
-        $SQL = "INSERT INTO {$table}(".implode(",", $fields).") VALUES ".implode(",", $values);
-
-        return $this->query($SQL);
-    }
-	
-    /**
-     * 更新表数据
-     *
-     * @param string $table 数据表名
-     * @param string $where 更新条件
-     * @param array $uplist 更新的数据数组,数组名对应字段名
-     * @return resource
-     */
-    function updateNew($table,$where,$uplist,$replace=0) {
-        if(!$table) return;
-        if(!is_array($uplist) || count($uplist) == 0) return;
-        $where = $where ? "WHERE $where" : '';
-        foreach($uplist as $key => $val) {
-            $set[] = "$key='$val'";
-        }
-        if($replace) {
-            $SQL = "REPLACE INTO %s SET %s";
-        } else {
-            $SQL = "UPDATE %s SET %s";
-        }
-        $SQL = sprintf($SQL, $table, implode(", ", $set)." $where");
-        return $this->query($SQL);
+    public function lastInsertId() {
+        return mysqli_insert_id($this->link);
     }
 }
 ?>

@@ -31,19 +31,34 @@ class MenuModel extends Model {
     /**
      * 返回菜单信息
      */
-    public function getMenuList($where = "", $limit = '0,1000', $orderby = "id DESC") {
-        $sql = "SELECT id,parent_id,name,url FROM " . $this->tableName;
-
+    public function getMenuList($where = "") {
+        $sql = "SELECT * FROM " . $this->tableName." where `status`=1";
+        
         if ($where != "") {
-            $sql .= " WHERE " . $where;
+            $sql .= " AND ".$where;
         }
-
-        $sql .= " ORDER BY " . $orderby;
-        $sql .= " LIMIT " . $limit;
-
         return $this->selectAll($sql);
     }
-
+    /**
+     * 得到所有父级菜单
+     * @return type
+     */
+    public function getParentMenu(){
+        $data = $this->getMenuList('`parent_id`=0');
+        return $this->formatMenu($data);
+    }
+    /**
+     * 格式化菜单信息
+     * @param type $menuData
+     * @return type
+     */
+    public function formatMenu($menuData){
+        $rs = array();
+        foreach($menuData as $v){
+            $rs[$v['id']] = $v['name'];
+        }
+        return $rs;
+    }
     /**
      * 按ID返回菜单项
      * @param unknown_type $id
@@ -67,7 +82,7 @@ class MenuModel extends Model {
      * @param unknown_type $data
      */
     public function addMenu($data) {
-        $this->insertNew($this->tableName, $data);
+        $this->insert($data);
     }
 
     /**

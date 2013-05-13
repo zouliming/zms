@@ -45,7 +45,7 @@ echo Html::breadcumb(array(
     </div>
     <div class="control-group">
         <button type="submit" class="btn btn-primary">确定</button>
-        <?= Html::link('返回',array('master/index'),array('class'=>'btn'))?>
+        <?= Html::link('返回',array('menu/index'),array('class'=>'btn'))?>
     </div>
 </form>
 <script type="text/javascript">

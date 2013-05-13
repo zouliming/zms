@@ -41,7 +41,7 @@ class MenuController extends Controller{
             $this->view('menu/role', array(
                 'srcRoles' => $allRoles,
                 'menuRoles' => $targetRoles,
-                'masterId' => $id
+                'menuId' => $id
             ));
         }
     }
@@ -53,12 +53,18 @@ class MenuController extends Controller{
         $menuId = $this->getPost('menuId');
         $newRole = trim($this->getPost('newRole'),',');
         if($menuId && $newRole){
-            $menuRelationModel = Model::mo('');
+            $menuRelationModel = Model::mo('MenuRelationRole');
             //先删除之前的Role
-            $this->model->delete("");
-            $this->model->update(array(
-                'role'=>$newRole
-            ),'`id`='.$masterId);
+            $menuRelationModel->delete("menu_id=".$menuId);
+            //将新的关系添加到表中
+            $data = array();
+            foreach($newRole as $i){
+                $data[] = array(
+                    'menu_id'=>$menuId,
+                    'role_id'=>$i
+                );
+            }
+            $menuRelationModel->insertMany($data);
         }
         $this->forward('master/index');
     }
@@ -66,26 +72,22 @@ class MenuController extends Controller{
      * 菜单添加
      */
     public function actionAdd(){
-    	$submit = $this->getPost("smt");	//是否表单提交
-    	
-    	if($submit == 1) {
-            $data['name'] = $this->getPost("name");
+        if ($this->isPost()) {
+            $data['name'] = $this->getPost("menuName");
             $data['url'] = $this->getPost("url");
             $data['parent_id'] = intval($this->getPost("pid"));
 
-            if($data['url'] == "") {
-                    $data['url'] == "#";
+            if ($data['url'] == "") {
+                $data['url'] == "#";
             }
-
             $this->model->addMenu($data);
+            alert("添加成功", "menu/index");
+        }
 
-            alert("添加成功", "menu/add");
-    	}
-    	
-    	//获得所有父级权限
-    	$parents = $this->model->getMenuList("parent_id=0");
+        //获得所有父级权限
+        $parents = $this->model->getParentMenu();
         $this->view('menu/add', array(
-        	"parents"=>	$parents	
+            "parents" => array(0=>'作为父级')+$parents
         ));
     }
     

@@ -5,9 +5,9 @@ class MenuRelationRoleModel extends Model{
     public $_pripary = "";
     protected function rules(){
         return array(
-                'menu_id'=>array('int'),
-                'role_id'=>array('int'),
-            );
+            'menu_id'=>array('int'),
+            'role_id'=>array('int'),
+        );
     }
 }
 ?>

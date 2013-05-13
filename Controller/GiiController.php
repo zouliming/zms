@@ -1,6 +1,6 @@
 <?php
 class GiiController extends Controller{
-    public $layout = 'none';
+    public $layout = 'main';
     public $dirPath = "";//生成的文件路径
     public function __construct() {
         parent::__construct();
@@ -84,15 +84,24 @@ class GiiController extends Controller{
         if(!file_exists($modelPath)){
             mkdir($modelPath);
         }
-        $fileName = $className.'.php';
-        file_put_contents($modelPath.DIRECTORY_SEPARATOR.$fileName, $content);
+        $fileName = $className.'Model.php';
+        $bytes = file_put_contents($modelPath.DIRECTORY_SEPARATOR.$fileName, $content);
+        return $bytes>0?true:false;
     }
     public function actionGenerateModel(){
         if(Bee::get('method')=='POST'){
+            $res = array();
             $table = $this->getPost('inputTable');
-            $this->generateModel($table);
+            if(empty($table)){
+                $res['errorMessage'] = '表名不能为空';
+            }else{
+                $result = $this->generateModel($table);
+                $res['result'] = $result;
+                $res['modelPath']=$this->getModelPath();
+            }
+            $this->view('gii/generateModel',$res);
         }else{
-            $this->view('gii/generateModel',array(),'main');
+            $this->view('gii/generateModel',array());
         }
         
     }
