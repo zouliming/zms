@@ -82,7 +82,7 @@ class GiiController extends Controller{
         ),'none',true);
         $modelPath = $this->getModelPath();
         if(!file_exists($modelPath)){
-            mkdir($modelPath);
+            mkdir($modelPath,0777,true);
         }
         $fileName = $className.'Model.php';
         $bytes = file_put_contents($modelPath.DIRECTORY_SEPARATOR.$fileName, $content);

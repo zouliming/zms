@@ -11,10 +11,6 @@
         <script type="text/javascript" src="<?= JS_URL ?>bootstrap.js"></script>
         <script type="text/javascript" src="<?= JS_URL ?>jquery.tablesorter.js"></script>
         <script type="text/javascript" src="<?= JS_URL ?>jquery.tablecloth.js"></script>
-        <script type="text/javascript" src="<?= JS_URL ?>box.js"></script>
-        <script type="text/javascript">
-
-        </script>
     </head>
     <body>
         <div class="container">

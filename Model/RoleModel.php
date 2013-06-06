@@ -5,13 +5,28 @@
  * @author bric.shi
  * @create 2013.04.17
  */
-class RoleModel extends Model {
-
-    protected function rules() {
-        
-    }
-
+class RoleModel extends ActiveRecord {
     public $tableName = "role";
+    protected $_primaryKey = "id";
+    protected function rules(){
+        return array(
+            'name'=>array('required'),
+            'info'=>array('required'),
+            'update_master_id'=>array('required','uint'),
+            'update_master_name'=>array('required'),
+            'update_time'=>array('required','uint'),
+        );
+    }
+    public function attributeLabels(){
+        return array(
+            'id' => '角色id',
+            'name' => '角色名称',
+            'info' => '角色描述',
+            'update_master_id' => '最近修改者id',
+            'update_master_name' => '最近修改人',
+            'update_time' => '最近修改日期',
+        );
+    }
     
     /**
      * 返回所有角色
@@ -42,6 +57,9 @@ class RoleModel extends Model {
     public function getRoleById($id) {
         return $this->selectRow("SELECT * FROM " . $this->tableName . " WHERE id=" . $id);
     }
+    public function getRoleList(){
+        return $this->getAll('*');
+    }
     
     /**
      * 按ID返回角色名称
@@ -60,14 +78,6 @@ class RoleModel extends Model {
      */
     public function updateRole($where, $data) {
         $this->updateNew($this->tableName, $where, $data);
-    }
-
-    /**
-     * 添加操作项
-     * @param unknown_type $data
-     */
-    public function addRole($data) {
-        $this->insertNew($this->tableName, $data);
     }
 
     /**

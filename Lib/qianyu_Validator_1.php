@@ -32,10 +32,10 @@ class Validator {
     #	'name2' => array('funcname1', 'funcname2', array('funcname3', funcparam1, funcparam2)),
     #));
 
-    function check($data,$args) {
+    function check($args) {
         if (is_array($args)) {
             foreach ($args as $name => $check_funcs) {
-                $value = array_key_exists($name, $data) ? $data[$name] : NULL;
+                $value = array_key_exists($name, $_REQUEST) ? $_REQUEST[$name] : NULL;
                 $this->valid[$name] = $value;
                 $this->form[$name] = $value;
                 $this->error[$name] = '';
@@ -159,10 +159,10 @@ class Validator {
     #==================常用函数==================
     #=========检验是否为空=========
     #==$va->check(array(
-    #	'name' => array('required'),
+    #	'name' => array('not_blank'),
     #));
 
-    private function required($value, $func_param) {
+    private function not_blank($value, $func_param) {
         if (!empty($value) || $value === "0") {
             return array(TRUE);
         }

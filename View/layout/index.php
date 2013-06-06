@@ -6,7 +6,6 @@
         <link rel="stylesheet" type="text/css" href="css/login.css"/>
         <link rel="stylesheet" type="text/css" href="css/style.css?t=1364899264">
         <script type="text/javascript" src="<?= JS_URL ?>jquery.min.js"></script>
-        <script type="text/javascript" src="<?= JS_URL ?>box.js"></script>
         <script type="text/javascript">
             var resetIframeTime = 0;
             function reSetIframe(flag){
@@ -31,13 +30,6 @@
                     iframe.width = width;
                 }catch (ex){}
             }
-            //唯品会首页层显示
-            $("#show_home_link").die("mouseover").live("mouseover",function(){
-                $(this).children("div").show();
-            });
-            $("#show_home_link").die("mouseout").live("mouseout",function(){
-                $(this).children("div").hide();
-            });
         </script>
     </head>
     <body onResize="reSetIframe('ture')">

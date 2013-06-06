@@ -8,7 +8,7 @@
 class RoleController extends Controller {
 
     public $layout = 'main';
-    var $model = "";
+    public $model = "";
 
     function __construct() {
         $this->model = Model::mo('Role');
@@ -98,21 +98,21 @@ class RoleController extends Controller {
      * 角色添加
      */
     public function actionAdd() {
-
-        $submit = $this->getPost("smt"); //是否表单提交
-
-        if ($submit == 1) {
+        $model = new RoleModel();
+        if ($this->isPost()) {
             $data['name'] = $this->getPost("name");
             $data['info'] = $this->getPost("info");
             $data['update_master_id'] = $_SESSION['user']['id'];
             $data['update_master_name'] = $_SESSION['user']['name'];
             $data['update_time'] = time();
-
-            $this->model->addRole($data);
-
-            alert("添加成功", "role/add");
+            $model->loadValue($data);
+            if($model->save()){
+                $this->forward('role/index');
+            }
         }
-        $this->view('role/add');
+        $this->view('role/add',array(
+            'model'=>$model
+        ));
     }
 
     /**
@@ -120,43 +120,39 @@ class RoleController extends Controller {
      */
     public function actionUpdate() {
         $id = $this->getGet("id");
-        if ($id == "") {
-            $id = $this->getPost("id");
+        $roleModel = $this->model->find($id);
+        if($roleModel){
+            if($this->isPost()){
+                var_dump($_SESSION);
+                $data = array(
+                    'name' => $this->getPost("name"),
+                    'info' => $this->getPost("info"),
+                    'update_master_id' => $_SESSION['user']['id'],
+                    'update_master_name' => $_SESSION['user']['name'],
+                    'update_time' => time()
+                );
+                $aq = $roleModel->loadValue($data)->save();
+                if($aq){
+                    $this->forward('role/index');
+                }
+            }
+            $this->view('role/update', array(
+                "model" => $roleModel
+            ));
+        }else{
+            $this->forward('role/index');
         }
-        if (intval($id) <= 0) {
-            return false;
-        }
-
-        $submit = $this->getPost("smt");
-
-        if ($submit == 1) {
-            $data['name'] = $this->getPost("name");
-            $data['info'] = $this->getPost("info");
-            $data['update_master_id'] = $_SESSION['user']['id'];
-            $data['update_master_name'] = $_SESSION['user']['name'];
-            $data['update_time'] = time();
-
-            $this->model->updateRole("id=" . $id, $data);
-            alert("修改成功", "role/update&id=".$id);
-        }
-
-        $role = $this->model->getRoleById($id);
-        $this->view('role/update', array(
-            "role" => $role
-        ));
     }
 
     /**
      * 删除角色
      */
-    public function actionDel() {
+    public function actionDelete() {
         $id = $this->getGet("id");
-        if (intval($id) <= 0) {
-            return false;
+        if($id){
+            $this->model->delRole($id);
         }
-        $this->model->delRole($id);
-
-        jsonExit(array("msg" => "删除成功", "status" => 1));
+        $this->forward('role/index');
     }
 
 }
