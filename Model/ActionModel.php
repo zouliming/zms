@@ -12,7 +12,39 @@ class ActionModel extends Model {
     }
 
     public $tableName = "action";
-
+    
+    public function formatActions($actions){
+        $r = array();
+        foreach($actions as $v){
+            if($v['parent_id']==0){
+                $r[$v['id']] = array(
+                    'id'=>$v['id'],
+                    'name'=>$v['name']
+                );
+            }else{
+                if(array_key_exists($v['parent_id'], $r)){
+                    $r[$v['parent_id']]['children'][] = array(
+                        'id'=>$v['id'],
+                        'name'=>$v['name']
+                    );
+                }else{
+                    $r[$v['id']] = array(
+                        'id'=>$v['id'],
+                        'name'=>$v['name']
+                    );
+                }
+            }
+        }
+        return $r;
+    }
+    public function getAllActions(){
+        $actions = $this->getAll("`id`,`name`,`parent_id`",'order by `parent_id` asc,`id` desc');
+        
+        return $actions;
+    }
+    public function getMasterAction(){
+        
+    }
     /**
      * 返回操作项信息
      */

@@ -25,6 +25,27 @@ class RoleController extends Controller {
         ));
     }
 
+    public function actionAssign(){
+        $id = $this->getGet('id');
+        if ($id == "") {
+            $this->forward('role/index');
+        }else{
+            $allActions = Model::mo('action')->getAllActions();
+            $masterActions = Model::mo('RoleRelationAction')->getActionsByRole($id);
+            $targetActions = array();
+            foreach($allActions as $k=>$v){
+                if(in_array($k, $masterActions)){
+                    $targetActions[$k] = $v;
+                    unset($allActions[$k]);
+                }
+            }
+            $this->view('role/assign', array(
+                'srcActions' => $allActions,
+                'masterActions' => $targetActions,
+                'roleId' => $id
+            ));
+        }
+    }
     /**
      * 角色分配权限
      */

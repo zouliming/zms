@@ -136,6 +136,10 @@ class Db {
         $sql = 'select  ' . $fields . ' from `' . $this->tableName . '` ' . $where .' limit 1';
         return $this->selectRow($sql);
     }
+    public function getCol($fields,$where = ""){
+        $sql = 'select  ' . $fields . ' from `' . $this->tableName . '` ' . $where;
+        return $this->selectCol($sql);
+    }
 
     /**
      * 插入数据
