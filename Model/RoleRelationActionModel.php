@@ -11,5 +11,16 @@ class RoleRelationActionModel extends Model{
         $data = $this->getCol('action_id',"where `role_id`={$role}");
         return $data;
     }
+    public function changeAction($roleId,$actions){
+        $this->delete('`role_id`='.$roleId);
+        $r = array();
+        foreach($actions as $v){
+            $r[] = array(
+                'role_id'=>$roleId,
+                'action_id'=>$v
+            );
+        }
+        return $this->insertMany($r);
+    }
 }
 ?>

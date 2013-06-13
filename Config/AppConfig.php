@@ -5,7 +5,7 @@ class AppConfig{
         'host'=>"127.0.0.1",
         'username'=>"zouliming",
         'password'=>"caozuo",
-        'database' => "vendorplatform",
+        'database' => "zms",
     );
     //cookie配置
     public static $cookieSet = array(

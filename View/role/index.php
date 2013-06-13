@@ -6,7 +6,7 @@ echo Html::breadcumb(array(
 ?>
 <div class="main_addbtn">
     <dl>
-        <?= Html::link('添加角色', array('role/add'),array('class'=>'all_btn'))?>
+        <?= Html::link('添加角色', array('role/add'),array('class'=>'btn btn-primary'))?>
     </dl>
 </div>
 <div class="data-list">
@@ -29,7 +29,7 @@ echo Html::breadcumb(array(
                         <td><?php echo $item['update_master_name']; ?></td>
                         <td><?php echo date("Y-m-d H:i:s", $item['update_time']); ?></td>
                         <td>
-                            <?= Html::link('分配权限', array('role/priv','id'=>$item['id']))?>
+                            <?= Html::link('分配权限', array('role/assign','id'=>$item['id']))?>
                             <?= Html::link('修改', array('role/update','id'=>$item['id']))?>
                             <?= Html::link('删除', array('role/delete','id'=>$item['id']),array('onclick'=>"javascript:return confirm('你确定要删除吗？')"))?>
                         </td>

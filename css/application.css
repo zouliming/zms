@@ -1,0 +1,56 @@
+/* 分配权限的select 样式 */
+select.lang_select{
+    height: 300px;
+    float:left;
+}
+.lang_select option{
+    padding: 5px 13px;
+}
+.seperate{
+    float: left;
+    width: 100px;
+    height: 300px;
+    display: inline-block;
+    display:table;
+    text-align:center;
+}
+/* 角色权限 */
+.select_area{
+    width: 600px;
+}
+.select_area ul{
+    overflow: auto;
+}
+.select_area ul li{
+    float: left;
+    width: 100%;
+    line-height: 30px;
+    height: 30px;
+}
+.select_area li:hover{
+    background-color: #eee;
+}
+.select_area .p{
+    background-color: #0081C2;
+    color: #FFFFFF;
+    height: 30px;
+    border-bottom: thin solid #EEEEEE;
+}
+.select_area .p .item_name{
+    padding-left: 10px;
+    line-height: 30px;
+}
+.select_area .icon-chevron-down,.select_area .icon-chevron-up{
+    cursor: pointer;
+    opacity: 0.5;
+}
+.select_area .c .item_name{
+    padding-left: 20px;
+}
+.select_area .item_name{
+    float:left;
+}
+.select_area .check{
+    margin-right: 50px;
+    float: right;
+}

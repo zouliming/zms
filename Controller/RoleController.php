@@ -32,87 +32,44 @@ class RoleController extends Controller {
         }else{
             $allActions = Model::mo('action')->getAllActions();
             $masterActions = Model::mo('RoleRelationAction')->getActionsByRole($id);
-            $targetActions = array();
             foreach($allActions as $k=>$v){
-                if(in_array($k, $masterActions)){
-                    $targetActions[$k] = $v;
-                    unset($allActions[$k]);
+                if(in_array($v['id'], $masterActions) || in_array($v['parent_id'], $masterActions)){
+                    $allActions[$k]['mark'] = 1;
+                }else{
+                    $allActions[$k]['mark'] = 0;
                 }
             }
             $this->view('role/assign', array(
-                'srcActions' => $allActions,
-                'masterActions' => $targetActions,
+                'allActions' => $this->formatAction($allActions),
                 'roleId' => $id
             ));
         }
     }
-    /**
-     * 角色分配权限
-     */
-    public function actionPriv() {
-        $id = $this->getGet("id");
-        if ($id == "") {
-            $id = $this->getPost("id");
+    public function actionChangeAssign(){
+        if($this->isPost()){
+            $data = $this->getPost();
+            Model::mo('RoleRelationAction')->changeAction($data['roleId'],$data['actions']);
         }
-        if (intval($id) <= 0) {
-            return false;
-        }
-        $actionModel = Model::mo('Action');
-        $submit = $this->getPost("smt"); //是否表单提交
-
-        if ($submit == 1) {
-            $privs = $this->getPost("priv");
-            if (empty($privs)) {
-                jsonExit(array("msg" => "至少选择一个权限", "status" => -2));
-            }
-
-            //获取设置的$privs，逐个插入到数据表role_relation_action
-            $data = array();
-            //拼装批量添加数组
-            //'role_id','role_name','action_id','action_name','update_master_id','update_master_name','update_time'
-            $uptime = time();
-
-            foreach ($privs as $pr) {
-                $priv = explode(":", $pr);
-
-                $data[] = array($id, $this->model->getRoleNameById($id), $priv[0], $priv[1], $_SESSION['user']['id'], $_SESSION['user']['name'], $uptime);
-            }
-            //删除就有列表
-            $this->model->delActionByRole($id);
-            //插入新数据
-            $sql = $this->model->setActions($data);
-
-            jsonExit(array("msg" => "添加成功", "status" => 1));
-        }
-
-        $items = $this->model->getRoleList();
-
-        $tmpitems = $actionModel->getActionList();
-        $tmpselected = $actionModel->getActionByRole($id);
-        $actions = array();
-        $selected = array();
-        //按级别重组数组共js调用
-        foreach ($tmpitems as $tmp) {
-            if ($tmp['parent_id'] == 0) {
-                $actions[$tmp['id']]['name'] = $tmp['name'];
-            } else {
-                $actions[$tmp['parent_id']]['sublist'][$tmp['id']] = $tmp['name'];
+        $this->forward('role/index');
+    }
+    private function formatAction($actions){
+        $r = array();
+        foreach($actions as $k=>$v){
+            if($v['parent_id']==0 || !array_key_exists($v['parent_id'], $r)){
+                $r[$v['id']] = array(
+                    'name'=>$v['name'],
+                    'mark'=>$v['mark'],
+                    'children'=>array()
+                );
+            }else{
+                $r[$v['parent_id']]['children'][] = array(
+                    'id'=>$v['id'],
+                    'name'=>$v['name'],
+                    'mark'=>$v['mark']
+                );
             }
         }
-
-        foreach ($tmpselected as $tmp) {
-            if ($tmp['action_id'] == 0) {
-                $selected[$tmp['action_id']]['name'] = $tmp['action_name'];
-            } else {
-                $selected[$tmp['action_id']]['sublist'][$tmp['action_id']] = $tmp['action_name'];
-            }
-        }
-
-        $this->view('role/priv', array(
-            'roleid' => $id,
-            'actions' => json_encode($actions),
-            'selected' => json_encode($selected)
-        ));
+        return $r;
     }
 
     /**

@@ -146,7 +146,7 @@ class Db {
      * @param array $data 将要插入的数据 需要键值对应
      * @return mixed 成功返回最新插入的数据的Id，失败返回false
      */
-    function insert($data) {
+    public function insert($data) {
         if (!is_array($data) || count($data) == 0)
             return false;
         $cols = $values = "";
@@ -170,7 +170,7 @@ class Db {
      * @param array $data 数据数组
      * @return resource
      */
-    function insertMany($data) {
+    public function insertMany($data) {
         if (!is_array($data) || count($data) == 0)
             return;
         $values = "";
