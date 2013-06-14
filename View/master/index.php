@@ -3,12 +3,9 @@ echo Html::breadcumb(array(
     '用户管理'=>'master/index',
     '用户列表'=>'active',
 ));
+echo Html::link('指定角色', array('master/add'),array('class'=>'btn btn-primary'));
 ?>
-<div class="main_addbtn">
-    <dl>
-        <?= Html::link('指定角色', array('master/add'),array('class'=>'all_btn'))?>
-    </dl>
-</div>
+<hr>
 <div class="data-list">
     <table id="table1" >
         <thead>

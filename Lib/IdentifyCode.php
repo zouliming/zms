@@ -6,7 +6,11 @@ class IdentifyCode {
     public $font = 'STXINGKA.TTF';
     //以下字符将用于验证码中的字符 
     public $possible_letters = '0123456789';//为了避免混淆去掉了数字1和字母i
+    
     public $captcha_text_color = "0xe73261";//验证码字体颜色
+    const text_color_red = "0xe73261";
+    const text_color_blue = "0x3366cc";
+    
     public $captcha_noice_color = "0xe73261";//干扰颜色
     public $random_dots = 10;//干扰噪点数量
     public $random_lines = 30;//干扰线条数量
@@ -19,7 +23,7 @@ class IdentifyCode {
     public function setFontPath(){
         $this->font = LIB_DIRECTORY.SEP."fonts".SEP.$this->font;
     }
-    public function generateImg(){
+    public function generateImg($color="blue"){
         $code = '';
 
         $i = 0;
@@ -33,7 +37,11 @@ class IdentifyCode {
 
         /* 设置背景、文本和干扰的噪点 */
         imagecolorallocate($image, 255, 255, 255);
-
+        if($color=="blue"){
+            $this->captcha_text_color = self::text_color_blue;
+        }else{
+            $this->captcha_text_color = self::text_color_red;
+        }
         $arr_text_color = $this->hexrgb($this->captcha_text_color);
         $text_color = imagecolorallocate($image, $arr_text_color['red'], $arr_text_color['green'], $arr_text_color['blue']);
         

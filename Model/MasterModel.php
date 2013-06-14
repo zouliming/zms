@@ -98,8 +98,8 @@ class MasterModel extends Model {
      * @param type $password
      * @return type
      */
-    public function authMaster($merchId,$username, $password) {
-        return $this->selectRow("select * from master where `merch_id`=".$merchId." and `name`='" . $username . "' and `password`='" . md5($password) . "' and `enable`=1");
+    public function authMaster($username, $password) {
+        return $this->selectRow("select * from master where `name`='" . $username . "' and `password`='" . md5($password) . "' and `enable`=1");
     }
     
     /**

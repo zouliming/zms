@@ -48,17 +48,8 @@ class ActionModel extends Model {
     /**
      * 返回操作项信息
      */
-    public function getActionList($where = "", $limit = '0,1000', $orderby = "id DESC") {
-        $sql = "SELECT id,parent_id,name,info,update_master_id,update_master_name,update_time FROM " . $this->tableName;
-
-        if ($where != "") {
-            $sql .= " WHERE " . $where;
-        }
-
-        $sql .= " ORDER BY " . $orderby;
-        $sql .= " LIMIT " . $limit;
-
-        return $this->selectAll($sql);
+    public function getActionList($where = "1=1") {
+        return $this->getAll('*',"where ".$where." order by parent_id asc,id asc");
     }
 
     /**

@@ -43,12 +43,12 @@ table input[type="checkbox"]{
 }
 /*顶部菜单*/
 .frame_head {
-    background: none repeat scroll 0 0 #EC178A;
+    background: none repeat scroll 0 0 #2a5caa;
     height: 104px;
     width: 100%;
 }
 .head_title {
-    background: url("../img/titel_bg.png") no-repeat scroll center top transparent;
+    /*background: url("../img/titel_bg.png") no-repeat scroll center top transparent;*/
     height: 66px;
     margin: 0 auto;
     width: 1000px;
@@ -112,34 +112,6 @@ table input[type="checkbox"]{
     font-size: 12px;
     color:#717171;
 }
-.main_addbtn {
-    height: 70px;
-    width: 100%;
-}
-.main_addbtn dl {
-    float: left;
-    margin-right: 30px;
-    padding-top: 12px;
-}
-.all_btn {
-    background-position: 0 -130px;
-    display: block;
-    height: 30px;
-    line-height: 30px;
-    text-align: center;
-    width: 100px;
-    font-size: 12px;
-    background-image: url("../img/bnt_bg.png");
-    background-repeat: no-repeat;
-    color: #FFFFFF;
-}
-.all_btn:hover{
-    color: #fff;
-    text-decoration: none;
-}
-.all_btn:hover{
-    background-position: 0 -160px;
-}
 /* 搜索条件区域 */
 .condition_area {
     background: none repeat scroll 0 0 #FCF9FC;
@@ -166,19 +138,9 @@ table input[type="checkbox"]{
     margin-bottom: 18px;
 }
 .expSub {
-	font-size:20px;
-	text-align:center;
-	cursor:pointer;
-}
-.subtable {
-	display:none;
-	padding:0px;
-}
-.subtable table {
-	width:100%;
-}
-.subtable table{
-	width:100%;
+    font-size:20px;
+    text-align:center;
+    cursor:pointer;
 }
 
 /*弹出框*/

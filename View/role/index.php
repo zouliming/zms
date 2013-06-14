@@ -4,11 +4,8 @@ echo Html::breadcumb(array(
     '角色列表'=>'active',
 ));
 ?>
-<div class="main_addbtn">
-    <dl>
-        <?= Html::link('添加角色', array('role/add'),array('class'=>'btn btn-primary'))?>
-    </dl>
-</div>
+<?= Html::link('添加角色', array('role/add'),array('class'=>'btn btn-primary'))?>
+<hr>
 <div class="data-list">
     <table id="table1" >
         <thead>

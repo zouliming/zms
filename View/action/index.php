@@ -1,14 +1,11 @@
-<ul class="breadcrumb">
-    <li><a href="?r=action/index">操作权限管理</a> <span class="divider">/</span></li>
-    <li class="active">操作权限列表</li>
-</ul>
-<div class="main_addbtn">
-    <dl>
-        <a class="all_btn" href="javascript:;" onclick="showAdd();">
-            添加权限项 
-        </a>
-    </dl>
-</div>
+<?
+echo Html::breadcumb(array(
+    '权限项管理' => 'action/index',
+    '权限列表' => 'active'
+));
+echo Html::link('添加权限项', 'action/add', array('class' => 'btn btn-primary'));
+?>
+<hr>
 <div class="data-list">
     <table id="table1" >
         <thead>
@@ -22,106 +19,42 @@
             </tr> 
         </thead>
         <tbody>
-            <?php if (!empty($items)) { ?>
-                <?php foreach ($items as $item) { ?>
-                    <tr>
-                        <td class="expSub" style="text-align:center;" rel="row_<?php echo $item['info']['id']; ?>"><?php if (isset($item['sub'])) { ?>+<?php } ?></td>
-                        <td><?php echo $item['info']['name']; ?></td>
-                        <td><?php echo $item['info']['info']; ?></td>
-                        <td><?php echo $item['info']['update_master_name']; ?></td>
-                        <td><?php echo date("Y-m-d H:i:s", $item['info']['update_time']); ?></td>
-                        <td>
-                            <a href="javascript:void(0);" onclick="edit('<?php echo $item['info']['id']; ?>')">修改</a>
-                        </td>
-                    </tr>
-                    <?php
-                    if (isset($item['sub'])) {
-                        foreach ($item['sub'] as $subitem) {
-                            ?>
-                            <tr class="subtable" rel="row_<?php echo $item['info']['id']; ?>">
-                                <td style="text-align:right;"> ></td>
-                                <td>　<?php echo $subitem['name']; ?></td>
-                                <td><?php echo $subitem['info']; ?></td>
-                                <td><?php echo $subitem['update_master_name']; ?></td>
-                                <td><?php echo date("Y-m-d H:i:s", $subitem['update_time']); ?></td>
-                                <td>
-                                    <a href="javascript:void(0);" onclick="edit('<?php echo $subitem['id']; ?>')">修改</a>
-                                </td>
-                            </tr>
-
-                            <?php
-                        }
+            <?
+            if ($items) {
+                foreach ($items as $item) {
+                    $allItems = array_merge(array($item['info']),$item['sub']);
+                    foreach($allItems as $k=>$v){
+            ?>
+            <tr>
+                <td class="expSub" style="text-align:center;" rel="row_<?php echo $v['id']; ?>"><?=$k==0?'-':''?></td>
+                <td><?php echo $v['name']; ?></td>
+                <td><?php echo $v['info']; ?></td>
+                <td><?php echo $v['update_master_name']; ?></td>
+                <td><?php echo date("Y-m-d H:i:s", $v['update_time']); ?></td>
+                <td>
+                    <?= Html::link('修改', array('action/update', 'id' => $v['id'])) ?>
+                    <a onclick="del('<?=$v['id']?>')" href="javascript:void(0)">删除</a>
+                </td>
+            </tr>
+            <?
                     }
                 }
             } else {
-                ?>
-                <tr align="center">
-                    <td colspan="6" style="text-align:center;">暂无此类数据</td>
-                </tr>
-                <?php
+            ?>
+            <tr align="center">
+                <td colspan="6" style="text-align:center;">暂无此类数据</td>
+            </tr>
+            <?php
             }
             ?>
         </tbody>
     </table>
-    <?php echo $pageStr; ?>
 </div>
-<script>
-    /**
-     * 弹出添加框
-     */
-    function showAdd() {
-        //VPFbox.iframe('?r=action/add', "添加权限项", 570, 270);
-        location.href = "?r=action/add";
-    }
-    /**
-     * 弹出修改框
-     * @param id actionid
-     */
-    function edit(id) {
-        //VPFbox.iframe('?r=action/update&id='+id, "修改权限项",570, 270);
-        location.href = "?r=action/update&id="+id;
-    }
-    /**
-     * 删除
-     * @param id actionid
-     */
+<script type="text/javascript">
     function del(id) {
-        VPFbox.confirm("确认删除此操作项吗？", function() {
-            $.getJSON('?r=action/del',{id:id}, 
-            function(json){
-                if(json.status==1){
-                    VPFbox.alert("操作成功", function() {
-                        location.reload();
-                    });
-                } else {
-                    alert(json.msg);
-                }
-            }
-        );	
-        }, function() {
-            return false;
-        });
+        if(confirm('确认删除此权限项吗？')){
+            location.href = "index.php?r=action/delete&id="+id;
+        }
     }
-    /**
-     * 弹框关闭时自动刷新页面
-     */
-    function setRefeshFlag() {
-        $(".dui-dialog-close").click(function() {
-            location.href = location.href;
-        });
-    }
-
-    $(function() {
-        $(".expSub").click(function() {
-            if($(this).hasClass("exp")) {
-                $(this).html("+").removeClass("exp");
-            } else {
-                $(this).html("-").addClass("exp");
-            }
-            $(this).parent().siblings(".subtable[rel="+$(this).attr("rel")+"]").toggle();
-        })
-    });
-
-    //表格初始化
     $('#table1').tablecloth();
 </script>

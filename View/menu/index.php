@@ -2,11 +2,8 @@
     <li><a href="?r=menu/index">菜单管理</a> <span class="divider">/</span></li>
     <li class="active">菜单列表</li>
 </ul>
-<div class="main_addbtn">
-    <dl>
-        <?=html::link('添加菜单', 'menu/add',array('class'=>'all_btn'))?>
-    </dl>
-</div>
+<?=html::link('添加菜单', 'menu/add',array('class'=>'btn btn-primary'))?>
+<hr>
 <div class="data-list">
     <table id="table1" >
         <thead>
