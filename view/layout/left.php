@@ -1,33 +1,22 @@
-<div id="left" class="main_menu">
-<?php 
-	//获取菜单数据
-	$menu = MenuController::getMenu();
-	foreach($menu as $m) {
-?>
-<h1><?=$m['info']['name'];?></h1>
-<? if(isset($m['sub'])){ ?>
-	<div class="menu_list">
-		<ul id="my_menu" class="sdmenu">
-            <?php
-            	foreach($m['sub'] as $subitem) {
+<div class="well">
+    <ul class="nav nav-list">
+        <?php
+        //获取菜单数据
+        $menu = MenuController::getMenu();
+        $url = $this->getget('r');
+        foreach ($menu as $m) {
+        ?>
+            <li class="nav-header"><?=$m['info']['name']?></li>
+            <? if (isset($m['sub'])) {
+                foreach ($m['sub'] as $subitem) {
             ?>
-            <li>
-                <a href="?r=<?=$subitem['url']?>" class="test" target="main">
-                    <?=$subitem['name']?>
-                </a>
-            </li>
-            <?php 
+            <li<?=$url==$subitem['url']?' class="active"':''?>><a href="?r=<?= $subitem['url'] ?>"><?=$subitem['name']?></a></li>
+        <?php
                 }
-            ?>
-        </ul>
-    </div>
-    <?php
+            }
         }
-    }
-    ?>
+        ?>
+        <li class="divider"></li>
+        <li><a href="#">Help</a></li>
+    </ul>
 </div>
-<script type="text/javascript">
-	$('#left h1').bind('click',function(){
-        $(this).next('div').slideToggle('fast');
-    });
-</script>

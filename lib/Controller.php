@@ -6,12 +6,14 @@
 class Controller {
 
     private $r = "r"; //默认的访问参数
-    private $id; //Controller的原名称
-    private $action; //action的名称
+    public $id; //Controller的原名称
+    public $action; //action的名称
     public $layout;
+    public $script = array();//运行在页面上的脚本
     private $controller; //完整的控制器的类名称
     private $controllerFile; //控制器的文件名
 
+    public $pageTitle = "";
     public function __construct() {
         $this->parseController();
     }
@@ -77,8 +79,10 @@ class Controller {
                 $this->controllerFile = $controllerFile;
                 return $controller;
             }
+        }else{
+            showError("找不到对应的控制器文件，这个文件不存在:".$controllerFile);
+            die;
         }
-        return null;
     }
 
     public function createController() {
@@ -105,15 +109,37 @@ class Controller {
     public function setAction($a) {
         return 'action' . ucfirst($a);
     }
-
+    /**
+     * 标识开始运行脚本
+     */
+    public function beginScript(){
+        ob_start();
+    }
+    /**
+     * 标识停止脚本
+     */
+    public function endScript(){
+        $this->script[]  =  ob_get_clean();
+    }
+    /**
+     * 获取当前的脚本内容
+     * @return type
+     */
+    public function getScriptContent(){
+        $r = "";
+        foreach ($this->script as $s){
+            $r .= $s;
+        }
+        return $r;
+    }
     public function view($view, $data = array(), $layout = null, $return = false) {
-//        if (!empty($data)) foreach ($data as $key => $value) $$key = $value;
         $viewFile = $this->getViewFile($view);
         $output = $this->renderInternal($viewFile, $data, true);
 
         $layoutFile = $this->getLayoutFile($layout);
         if ($layoutFile !== false) {
-            $output = $this->renderInternal($layoutFile, array_merge($data, array('_layoutContent' => $output)), true);
+            $scriptContent = $this->getScriptContent();
+            $output = $this->renderInternal($layoutFile, array_merge($data, array('_layoutContent' => $output,'_scriptContent'=>$scriptContent)), true);
         }
         if ($return) {
             return $output;

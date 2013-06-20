@@ -58,41 +58,4 @@ function getCookie($key){
 function unsetCookie($key){
     setcookie($key, "", time() - 3600);
 }
-/**
- * json数据形式返回
- * @param unknown_type $data
- */
-function jsonExit($data) {
-    echo json_encode ( $data );
-    exit ();
-}
-
-/**
- * ajaxTip
- *
- * @param unknown_type $data
- */
-function ajaxTip($msg, $callback = "", $parent = false, $width = 215) {
-    header('Content-Type: text/html; charset=utf-8');
-    $js_string = "<script>";
-
-    if ($callback != "") {
-        if ($parent) {
-            $js_string .= "parent.";
-        }
-        $js_string .= $callback;
-    }
-    if ($parent) {
-        $js_string .= "parent.";
-    }
-    $js_string .= "VPFbox.alert('" . $msg . "'";
-    $js_string .= ",function(){}";
-    $js_string .= ",'确定'";
-    $js_string .= "," . $width . ");";
-
-    $js_string .= "</script>";
-
-    echo $js_string;
-    exit();
-}
 ?>

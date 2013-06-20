@@ -8,7 +8,7 @@
 class ActionController extends Controller {
 
     public $layout = 'main';
-    var $model = "";
+    public $model;
 
     function __construct() {
         $this->model = Model::mo('Action');
@@ -29,7 +29,8 @@ class ActionController extends Controller {
             }
         }
         $this->view('action/index', array(
-            'items' => $items
+            'items' => $items,
+            'pageTitle'=>'aaaaaaa'
         ));
     }
 

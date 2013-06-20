@@ -75,7 +75,13 @@ class IdentifyCode {
 
         $checkCook = self::encrypt($code);
         $secure = $_SERVER['SERVER_PORT'] == 443 ? 1 : 0;
-        setcookie("loginVerifyCode", $checkCook, time() + 600, AppConfig::$cookieSet["path"], AppConfig::$cookieSet["domain"], $secure);
+        $cookieConfig = Bee::app()->getConfig('cookie');
+        if(isset($cookieConfig["path"]) && isset($cookieConfig["domain"])){
+            setcookie("loginVerifyCode", $checkCook, time() + 600, $cookieConfig["path"], $cookieConfig["domain"], $secure);
+        }else{
+            setcookie("loginVerifyCode", $checkCook, time() + 600);
+        }
+        
     }
 
     public function hexrgb($hexstr){

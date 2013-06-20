@@ -50,6 +50,7 @@ echo Html::link('添加权限项', 'action/add', array('class' => 'btn btn-prima
         </tbody>
     </table>
 </div>
+<? $this->beginScript(); ?>
 <script type="text/javascript">
     function del(id) {
         if(confirm('确认删除此权限项吗？')){
@@ -58,3 +59,4 @@ echo Html::link('添加权限项', 'action/add', array('class' => 'btn btn-prima
     }
     $('#table1').tablecloth();
 </script>
+<? $this->endScript(); ?>

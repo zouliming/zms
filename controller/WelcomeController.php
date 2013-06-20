@@ -1,5 +1,6 @@
 <?php
 class WelcomeController extends Controller{
+    public $layout = 'main';
     public function actionIndex(){
         $this->forward('welcome/login');
     }
@@ -58,7 +59,7 @@ class WelcomeController extends Controller{
             $this->view('welcome/login',array(
                 'showIndentifyCode'=>$showIndentifyCode,
                 'error'=>$error
-            ));
+            ),'none');
         }
     }
     public function actionLogout(){
@@ -66,10 +67,10 @@ class WelcomeController extends Controller{
         $this->forward('welcome/login');
     }
     public function actionWelcome(){
-        $this->view('welcome/welcome',array(),'index');
+        $this->view('welcome/welcome',array());
     }
     public function actionMain(){
-        $this->view('welcome/main',array(),'main');
+        $this->view('welcome/main',array());
     }
 }
 ?>

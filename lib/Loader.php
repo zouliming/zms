@@ -1,8 +1,6 @@
 <?php
 Class Loader{
-    /**
-     * @var Vipcore_Loder Singleton instance
-     */
+    
     protected static $_instance;
     /**
      * @var string Base path to resource classes

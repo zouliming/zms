@@ -44,6 +44,8 @@ echo Html::breadcumb(array(
         </tbody>
     </table>
 </div>
+<? $this->beginScript(); ?>
 <script type="text/javascript">
     $('#table1').tablecloth();
 </script>
+<? $this->endScript(); ?>

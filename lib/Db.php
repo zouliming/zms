@@ -7,7 +7,7 @@ class Db {
     private $link = null;
 
     function __construct() {
-        $db = AppConfig::$databaseSet;
+        $db = Bee::app()->getConfig('database');
         $this->_getDB($db);
     }
 

@@ -40,7 +40,8 @@ class Html{
      * @return type
      */
     public static function url($url,$param=array()){
-        $u = APP_URL.'/index.php?r='.$url;
+        $app = Bee::app()->getConfig('project','domain');
+        $u = $app.'/index.php?r='.$url;
         if($param){
             foreach($param as $k=>$v){
                 $u .= '&'.$k.'='.$v;

@@ -49,6 +49,7 @@ echo Html::link('指定角色', array('master/add'),array('class'=>'btn btn-prim
     </table>
 <?php echo $pageStr; ?>
 </div>
+<? $this->beginScript(); ?>
 <script type="text/javascript">
     function del(id) {
         if(confirm('确认删除此操作项吗？')){
@@ -57,3 +58,4 @@ echo Html::link('指定角色', array('master/add'),array('class'=>'btn btn-prim
     }
     $('#table1').tablecloth();
 </script>
+<? $this->endScript(); ?>

@@ -7,17 +7,17 @@
 </div>
 <div class="main_addbtn">
     <dl>
-        <a class="all_btn" href="javascript:;" onclick="Vendor.goods.showadd()">
+        <a class="btn" href="javascript:;" onclick="Vendor.goods.showadd()">
             添加商品信息
         </a>
     </dl>
     <dl>
-        <a class="all_btn" href="javascript:;" onclick="Vendor.goods.ImportGoods()">
+        <a class="btn" href="javascript:;" onclick="Vendor.goods.ImportGoods()">
             批量导入商品资料
         </a>
     </dl>
     <dl>
-        <a class="all_btn" href="javascript:;" onclick="Vendor.goods.ImportPic()">
+        <a class="btn" href="javascript:;" onclick="Vendor.goods.ImportPic()">
             批量导入商品图片
         </a>
     </dl>
@@ -163,6 +163,8 @@
         </ul>
     </div>
 </div>
+<? $this->beginScript(); ?>
 <script type="text/javascript">
     $('#table1').tablecloth();
 </script>
+<? $this->endScript(); ?>

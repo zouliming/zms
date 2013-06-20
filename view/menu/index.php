@@ -57,6 +57,7 @@
         </tbody>
     </table>
 </div>
+<? $this->beginScript(); ?>
 <script type="text/javascript">
     function del(id) {
         if(confirm('确认删除此操作项吗？')){
@@ -66,3 +67,4 @@
     //表格初始化
     $('#table1').tablecloth();
 </script>
+<? $this->endScript(); ?>

@@ -1,0 +1,156 @@
+/*公用样式*/
+html{ height:100%;}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,form,fieldset,legend,input,button,textarea,p,th,td{margin:0;padding:0;}
+table{border-collapse:collapse}
+ul,ol{list-style:none}
+em,i,address{font-style:normal}
+fieldset,img{border:0}
+img{vertical-align:bottom}
+body{ background:#fff; position:relative;}
+a{text-decoration: none}
+
+/*自定义全局*/
+body {
+    margin-top: 40px;
+    padding-top: 20px;
+    position: relative;
+}
+.clear{ clear:both;}
+.text_r{ text-align: right; }
+.autow{
+    width: auto;
+}
+.w30{ width: 30px; }
+.w50{ width: 50px; }
+.w80{ width: 80px; }
+.w100{ width: 100px; }
+.w120{ width: 120px; }
+.w150{ width: 150px; }
+.w160{ width: 160px; }
+.w177{ width: 177px; }
+.w200{ width: 200px; }
+.w250{ width: 250px; }
+
+/* 顶部菜单 */
+body > .navbar .brand {
+    color: #000000;
+    float: right;
+    font-weight: bold;
+    margin-left: 20px;
+    padding-left: 0;
+    padding-right: 0;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 30px rgba(255, 255, 255, 0.125);
+    transition: all 0.2s linear 0s;
+}
+/*左边菜单 nav */
+.nav-header{
+    font-size: 14px;
+}
+
+/*左边菜单 side-bar */
+.bs-docs-sidenav.affix {
+    top: 40px;
+}
+.bs-docs-sidenav {
+    width: 258px;
+}
+.bs-docs-sidenav {
+    background-color: #FFFFFF;
+    border-radius: 6px 6px 6px 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+    margin: 30px 0 0;
+    padding: 0;
+    width: 228px;
+}
+
+.bs-docs-sidenav > li > a {
+    border: 1px solid #E5E5E5;
+    display: block;
+    margin: 0 0 -1px;
+    padding: 8px 14px;
+}
+.bs-docs-sidenav > li:first-child > a {
+    border-radius: 6px 6px 0 0;
+}
+.bs-docs-sidenav > li:last-child > a {
+    border-radius: 0 0 6px 6px;
+}
+
+.bs-docs-sidenav .icon-chevron-right {
+    float: right;
+    margin-right: -6px;
+    margin-top: 2px;
+    opacity: 0.25;
+}
+
+
+/*登录样式*/
+.login_box{ width:560px; height:370px; border:1px solid #fff; position:absolute; top:50%; left:50%; margin-left:-280px; margin-top:-250px; background:#f9f6f9; overflow:hidden;}
+.round{ border-radius:5px; -webkit-border-radius:5px; -moz-border-radius:5px;}
+.light{ box-shadow: 0 0 0 #f5f5f5 inset, 0 0 5px rgba(0, 0, 0, .15); -moz-box-shadow: 0 0 0 #f5f5f5 inset, 0 0 5px rgba(0, 0, 0, .15); -webkit-box-shadow: 0 0 0 #f5f5f5 inset, 0 0 5px rgba(0, 0, 0, .15);}
+.tran{ opacity:0.9; filter: alpha(opacity = 90);}
+.login_box .til{ width:98%; padding:10px 0; height:40px; border-bottom:1px solid #d7d4d6; margin:0 auto;}
+.til_china,.til_en {font-family:Applied Font; font-weight:bold;font-style:normal; text-align:center;color:#6b6b6b; text-shadow:1px 1px 0px #fff; height:24px;}
+.til_en{ padding-top:3px; font-family:Arial, Helvetica, sans-serif, Verdana, Geneva, sans-serif;}
+.msg{
+    color: red;
+    font-weight: bold;
+    height: 30px;
+    line-height: 30px;
+    margin: 10px auto 0;
+    padding: 5px;
+    text-align: center;
+    width: 360px;
+}
+.msg_shadow{
+    box-shadow: 5px 5px 10px 0 #BBBBBB;
+    background-color: #FFFFFF;
+}
+.inf{ width:360px; height:auto; margin:10px auto 0 auto;}
+.inf li{ margin-bottom:30px; display:block; color:#797979; height:30px; clear:both; position:relative;padding-left: 30px;}
+.ul_title{ height:30px; float:left; text-align:right; line-height:30px; width:70px;}
+.ul_input{ height:30px; text-align:left; float:left;}
+.ul_img{ height:30px; float:left; margin-left:10px;}
+.inf_veri{ width:90px;}
+
+/*右边主页面*/
+.main_addbtn{ width:98%; margin:0 auto; height:70px; padding-left:22px;}/*添加供应商块*/
+.main_addbtn dl{ float:left; padding-top:12px;margin-right:30px;}
+.main_prompt {
+    border-bottom: 1px solid #E7E7E7;
+    height: 54px;
+    line-height: 54px;
+    width: 100%;
+    font-size: 12px;
+    color:#717171;
+}
+/* 搜索条件区域 */
+.condition_area {
+    background: none repeat scroll 0 0 #FCF9FC;
+    border: 1px solid #E7E7E7;
+    height: auto;
+    padding: 14px 0 14px 10px;
+    width: 100%;
+    font-size: 12px;
+    color: #717171;
+    margin-bottom: 18px;
+}
+.condition_area dl{
+    clear: both;
+    height: 38px;
+}
+.condition_area dd{
+    float: left;
+    height: 30px;
+    line-height: 30px;
+}
+/* 数据列表区域 */
+.data-list{
+    width: 870px;
+    margin-bottom: 18px;
+}
+.expSub {
+    font-size:20px;
+    text-align:center;
+    cursor:pointer;
+}
