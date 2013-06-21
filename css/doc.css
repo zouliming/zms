@@ -3,7 +3,6 @@ html{ height:100%;}
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,form,fieldset,legend,input,button,textarea,p,th,td{margin:0;padding:0;}
 table{border-collapse:collapse}
 ul,ol{list-style:none}
-em,i,address{font-style:normal}
 fieldset,img{border:0}
 img{vertical-align:bottom}
 body{ background:#fff; position:relative;}

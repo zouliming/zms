@@ -136,6 +136,10 @@ class Bee {
     public function getPager(){
         return $this->getComponet('Pager');
     }
+    public function getDb(){
+        return $this->getComponet('Db');
+    }
+
     public static function get($key,$field=''){
         if($key == ''){
             return isset(self::$data['get'])?self::$data['get']:"";

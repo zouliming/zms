@@ -26,7 +26,7 @@ class MasterModel extends Model {
         $sql .= " ORDER BY " . $orderby;
         $sql .= " LIMIT " . $limit;
 
-        return $this->selectAll($sql);
+        return $this->db->selectAll($sql);
     }
 
     /**
@@ -35,14 +35,14 @@ class MasterModel extends Model {
      * @return multitype:
      */
     public function getMasterById($id) {
-        return $this->selectRow("SELECT * FROM " . $this->tableName . " WHERE id=" . $id);
+        return $this->db->selectRow("SELECT * FROM " . $this->tableName . " WHERE id=" . $id);
     }
     /**
      * 按masterId返回角色信息
      */
     public function getMasterRole($masterId) {
         $sql = "SELECT `role` FROM master WHERE `id`=" . $masterId;
-        $data = $this->selectOne($sql);
+        $data = $this->db->selectOne($sql);
         $r = empty($data)?"":explode(',',$data);
         return $r;
     }
@@ -52,7 +52,7 @@ class MasterModel extends Model {
      * @return multitype:
      */
     public function getMasterNameById($id) {
-        $master = $this->selectCol("SELECT name FROM " . $this->tableName . " WHERE id=" . $id);
+        $master = $this->db->selectCol("SELECT name FROM " . $this->tableName . " WHERE id=" . $id);
         return $master[0];
     }
 
@@ -99,7 +99,7 @@ class MasterModel extends Model {
      * @return type
      */
     public function authMaster($username, $password) {
-        return $this->selectRow("select * from master where `name`='" . $username . "' and `password`='" . md5($password) . "' and `enable`=1");
+        return $this->db->selectRow("select * from master where `name`='" . $username . "' and `password`='" . md5($password) . "' and `enable`=1");
     }
     
     /**

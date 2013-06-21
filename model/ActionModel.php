@@ -39,7 +39,7 @@ class ActionModel extends Model {
     }
     public function getAllActions(){
         $actions = $this->getAll("`id`,`name`,`parent_id`",'order by `parent_id` asc,`id` desc');
-        
+
         return $actions;
     }
     public function getMasterAction(){
@@ -60,7 +60,7 @@ class ActionModel extends Model {
 
         $sql .= " WHERE role_id=" . $roleId;
 
-        return $this->selectAll($sql);
+        return $this->db->selectAll($sql);
     }
 
     /**
@@ -69,7 +69,7 @@ class ActionModel extends Model {
      * @return multitype:
      */
     public function getActionById($id) {
-        return $this->selectRow("SELECT * FROM " . $this->tableName . " WHERE id=" . $id);
+        return $this->db->selectRow("SELECT * FROM " . $this->tableName . " WHERE id=" . $id);
     }
 
     /**

@@ -1,21 +1,20 @@
 <?php
 
 class Db {
-
-    public $tableName;
     public static $_debug = false;
     private $link = null;
-
+    public static $instance;
     function __construct() {
         $db = Bee::app()->getConfig('database');
         $this->_getDB($db);
     }
-
+    
     public static function debug() {
         self::$_debug = true;
     }
 
     private function _getDB($db) {
+        if(BEE_DEBUG) $beginTime = microtime(TRUE);
         $this->link = mysqli_connect($db['host'], $db['username'], $db['password']);
         if (!$this->link) {
             $this->halt('DATABASE CONNECT ERROR');
@@ -28,6 +27,7 @@ class Db {
         } else {
             mysqli_set_charset($this->link, 'utf8');
         }
+        if(BEE_DEBUG) Bee::$data['debug']['db'][] = array('sql'=>'Connect DB Server','time'=>microtime(TRUE)-$beginTime);
         return true;
     }
 
@@ -44,8 +44,10 @@ class Db {
     public function query($sql) {
         if (self::$_debug)
             echo "<p>" . $sql . "<br></p>";
+        if(BEE_DEBUG) $beginTime = microtime(TRUE);
         $result = mysqli_query($this->link, $sql);
-        if ($result == false) {
+        if(BEE_DEBUG) Bee::$data['debug']['db'][] = array('sql'=>$sql,'time'=>microtime(TRUE)-$beginTime);
+        if ($result == false && (BEE_DEBUG || self::$_debug)) {
             header('Content-type: text/html; charset=utf-8');
             echo "查询时发生了错误：" . mysqli_error($this->link) . "<br/>";
             echo "<font style='color:red'>SQL:" . $sql . "</font>";
@@ -100,132 +102,7 @@ class Db {
         }
     }
 
-    /***************      便捷方法           **************** */
-
-    /**
-     * 得到数量
-     * @param String $where where条件语句
-     * @return int count数量
-     */
-    public function getCount($where = "") {
-        return $this->selectOne("select count(*) from `" . $this->tableName . "` " . $where);
-    }
-
-    /**
-     * 查询数据
-     * @param String $fields 字段名
-     * @param String $where where条件
-     * @param int $currpage 当前页码
-     * @param int $pageSize 每页显示的数量
-     * @return Array 二维数组
-     */
-    public function getAll($fields, $where = '', $currpage = '', $pageSize = '') {
-        $sql = 'select  ' . $fields . ' from `' . $this->tableName . '` ' . $where;
-        if (!empty($currpage) && !empty($pageSize)) {
-            $sql .= ' limit ' . ($currpage - 1) * $pageSize . ',' . $pageSize;
-        }
-        return $this->selectAll($sql);
-    }
-    /**
-     * 查询一条数据
-     * @param type $fields
-     * @param type $where
-     * @return type
-     */
-    public function getRow($fields,$where = ""){
-        $sql = 'select  ' . $fields . ' from `' . $this->tableName . '` ' . $where .' limit 1';
-        return $this->selectRow($sql);
-    }
-    public function getCol($fields,$where = ""){
-        $sql = 'select  ' . $fields . ' from `' . $this->tableName . '` ' . $where;
-        return $this->selectCol($sql);
-    }
-
-    /**
-     * 插入数据
-     * @param array $data 将要插入的数据 需要键值对应
-     * @return mixed 成功返回最新插入的数据的Id，失败返回false
-     */
-    public function insert($data) {
-        if (!is_array($data) || count($data) == 0)
-            return false;
-        $cols = $values = "";
-        foreach ($data as $key => $val) {
-            $values .= "'" . mysqli_real_escape_string($this->link, $val) . "',";
-            $cols .= "`" . trim($key) . "`,";
-        }
-        $cols = rtrim($cols, ',');
-        $values = rtrim($values, ',');
-        $sql = "INSERT INTO {$this->tableName} ({$cols}) VALUES ({$values})";
-        $result = $this->query($sql);
-        if ($result) {
-            return $this->lastInsertId();
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * 插入多条表数据
-     * @param array $data 数据数组
-     * @return resource
-     */
-    public function insertMany($data) {
-        if (!is_array($data) || count($data) == 0)
-            return;
-        $values = "";
-        $keys = array_keys($data[0]);
-        $cols = implode('`,`', $keys);
-        foreach ($data as $key => $val) {
-            $values .= "(";
-            foreach ($val as $k => $v) {
-                $values .= "'" . mysqli_real_escape_string($this->link, $v) . "',";
-            }
-            $values = rtrim($values, ',');
-            $values .= "),";
-        }
-        $cols = '`' . $cols . '`';
-        $values = rtrim($values, ',');
-        $sql = "INSERT INTO {$this->tableName} ({$cols}) VALUES {$values}";
-        $result = $this->query($sql);
-        if ($result) {
-            return $this->lastInsertId();
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * 更改数据
-     * @param array $data 二维数组
-     * @param String $where where条件语句
-     * @return boolean
-     */
-    public function update($data, $where) {
-        $tem = "";
-        foreach ($data as $k => $v) {
-            $tem .= " `{$k}`='" . mysqli_real_escape_string($this->link, $v) . "',";
-        }
-        $tem = rtrim($tem, ',');
-        $sql = "update " . $this->tableName . "  SET {$tem} WHERE {$where}";
-        $result = $this->query($sql);
-        if ($result) {
-            return $this->affectRows();
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * 删除数据
-     * @param type $where
-     * @return type
-     */
-    public function delete($where) {
-        $sql = "DELETE from " . $this->tableName . " WHERE " . $where;
-        return $this->execute($sql);
-    }
-
+    
     /**
      * 
      * 获取最近新增记录id：需紧跟insert后读取

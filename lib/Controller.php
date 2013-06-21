@@ -55,6 +55,8 @@ class Controller {
             $actionMethod = $this->getAction();
             if (method_exists($ca, $actionMethod)) {
                 $ca->$actionMethod();
+                if(BEE_DEBUG)
+                    require(LIB_DIRECTORY.SEP.'Debug.php');
             } else {
                 showError($this->controller . " 找不到对应的Action：" . $actionMethod);
             }
@@ -133,9 +135,10 @@ class Controller {
         return $r;
     }
     public function view($view, $data = array(), $layout = null, $return = false) {
+        if(BEE_DEBUG) $beginTime = microtime(TRUE);$beginMem = memory_get_usage();
         $viewFile = $this->getViewFile($view);
         $output = $this->renderInternal($viewFile, $data, true);
-
+        if(BEE_DEBUG)  Bee::$data['debug']['tplData'] = $data;
         $layoutFile = $this->getLayoutFile($layout);
         if ($layoutFile !== false) {
             $scriptContent = $this->getScriptContent();
@@ -146,6 +149,7 @@ class Controller {
         } else {
             echo $output;
         }
+        if(BEE_DEBUG) Bee::$data['debug']['flow']['view'][] = array('txt'=>$view, 'time'=>microtime(TRUE)-$beginTime, 'mem'=>memory_get_usage()-$beginMem);
     }
 
     /**

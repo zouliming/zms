@@ -26,7 +26,7 @@ class MenuModel extends Model {
      * @return type
      */
     public function getMenuRole($roleId){
-        return $this->selectCol("select role_id from menu_relation_role where menu_id=".$roleId);
+        return $this->db->selectCol("select role_id from menu_relation_role where menu_id=".$roleId);
     }
     /**
      * 返回菜单信息
@@ -37,7 +37,7 @@ class MenuModel extends Model {
         if ($where != "") {
             $sql .= " AND ".$where;
         }
-        return $this->selectAll($sql);
+        return $this->db->selectAll($sql);
     }
     /**
      * 得到所有父级菜单
@@ -65,7 +65,7 @@ class MenuModel extends Model {
      * @return multitype:
      */
     public function getMenuById($id) {
-        return $this->selectRow("SELECT * FROM " . $this->tableName . " WHERE id=" . $id);
+        return $this->db->selectRow("SELECT * FROM " . $this->tableName . " WHERE id=" . $id);
     }
 
     /**

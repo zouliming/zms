@@ -14,6 +14,25 @@ function magic_quotes($value, $flag = FALSE) {
     }
 }
 /**
+ * 任何变量的调试输出
+ *
+ * @param  mixed $var
+ * @return mixed
+ */
+function dump($var, $exit = FALSE){
+    echo '<pre>';
+    if (is_array($var)) { print_r($var); }
+    elseif(is_object($var)) { echo get_class($var)." Object"; }
+    elseif(is_resource($var)) { echo (string)$var; }
+    else { echo var_dump($var); }
+    echo '</pre>';
+    if ($exit) exit;
+}
+function microtime_float($microtime = NULL) {
+    list($usec, $sec) = explode(' ', !$microtime ? microtime(TRUE) : $microtime);
+    return ((float) $usec + (float) $sec);
+}
+/**
  * 提示错误信息
  * @param type $status
  * @param type $message
@@ -57,5 +76,16 @@ function getCookie($key){
  */
 function unsetCookie($key){
     setcookie($key, "", time() - 3600);
+}
+/**
+ * 显示字节
+ * @param type $bytes
+ * @return type
+ */
+function byteConvert($bytes){
+    $s = array('B', 'Kb', 'MB', 'GB', 'TB', 'PB');
+    $e = floor(log($bytes)/log(1024));
+
+    return sprintf('%.2f '.$s[$e], ($bytes/pow(1024, floor($e))));
 }
 ?>

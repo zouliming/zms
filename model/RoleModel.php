@@ -46,7 +46,7 @@ class RoleModel extends ActiveRecord {
     public function getRoleListByMenu($menuId) {
         $sql = "SELECT mrr.menu_id,r.* FROM menu_relation_role mrr left join ".$this->tableName . " r on (r.id=mrr.role_id) WHERE mrr.menu_id=" . $menuId;
 
-        return $this->selectAll($sql);
+        return $this->db->selectAll($sql);
     }
 
     /**
@@ -55,7 +55,7 @@ class RoleModel extends ActiveRecord {
      * @return multitype:
      */
     public function getRoleById($id) {
-        return $this->selectRow("SELECT * FROM " . $this->tableName . " WHERE id=" . $id);
+        return $this->db->selectRow("SELECT * FROM " . $this->tableName . " WHERE id=" . $id);
     }
     public function getRoleList(){
         return $this->getAll('*');
@@ -67,7 +67,7 @@ class RoleModel extends ActiveRecord {
      * @return multitype:
      */
     public function getRoleNameById($id) {
-        $role = $this->selectCol("SELECT name FROM " . $this->tableName . " WHERE id=" . $id);
+        $role = $this->db->selectCol("SELECT name FROM " . $this->tableName . " WHERE id=" . $id);
         return $role[0];
     }
 
