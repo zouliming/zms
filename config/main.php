@@ -1,7 +1,7 @@
 <?php
 return array(
     'project'=>array(
-        'name'=>'管理后台',
+        'name'=>'西方失败',
         'timezone'=>'Asia/Shanghai',
         'domain'=>'zms.zouliming.com',
         'defaultPageTitle'=>'页面',

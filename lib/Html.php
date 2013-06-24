@@ -40,8 +40,7 @@ class Html{
      * @return type
      */
     public static function url($url,$param=array()){
-        $app = Bee::app()->getConfig('project','domain');
-        $u = $app.'/index.php?r='.$url;
+        $u = '/index.php?r='.$url;
         if($param){
             foreach($param as $k=>$v){
                 $u .= '&'.$k.'='.$v;
@@ -64,7 +63,6 @@ class Html{
         }else{
             $href = self::url($url);
         }
-        
         if($attribute){
             $attrStr = Html::attributes($attribute);
         }

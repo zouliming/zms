@@ -9,7 +9,7 @@ class ActionController extends Controller {
 
     public $layout = 'main';
     public $model;
-
+    public $pageTitle = "这就是标题";
     function __construct() {
         $this->model = Model::mo('Action');
     }
@@ -29,8 +29,7 @@ class ActionController extends Controller {
             }
         }
         $this->view('action/index', array(
-            'items' => $items,
-            'pageTitle'=>'aaaaaaa'
+            'items' => $items
         ));
     }
 
