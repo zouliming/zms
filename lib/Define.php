@@ -1,6 +1,6 @@
 <?php
 //设置DEBUG模式
-defined('BEE_DEBUG') or define('BEE_DEBUG',FALSE);
+defined('BEE_DEBUG') or define('BEE_DEBUG',0);
 
 define("SEP",substr(PHP_OS,0,3)=='WIN'?"\\":"/");
 //项目根目录
@@ -22,13 +22,9 @@ define('DEFAULT_CONTROLLER','welcome');
 define('DEFAULT_ACTION','index');
 
 //设置Debug
-if(BEE_DEBUG){
+if(BEE_DEBUG==2){
     define('BEE_BEGIN_TIME',      microtime(TRUE));
     define('BEE_MEMORY_LIMIT_ON', function_exists('memory_get_usage'));
     if(BEE_MEMORY_LIMIT_ON) define('BEE_START_MEMS', memory_get_usage());
-    ini_set('display_errors', 1);
-    error_reporting(E_ALL & ~E_NOTICE);
-}else{
-    error_reporting(0);
 }
 ?>

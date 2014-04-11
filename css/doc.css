@@ -154,3 +154,15 @@ body > .navbar .brand {
     text-align:center;
     cursor:pointer;
 }
+/* 详细页面的dl组件的样式 */
+.dl-beautiful dt{
+        line-height: 35px;
+        border-right: solid 1px #ddd;
+        padding-right: 15px;
+        border-bottom: solid 1px #eee;
+}
+.dl-beautiful dd{
+        line-height: 35px;
+        padding-left: 15px;
+        border-bottom: solid 1px #eee;
+}

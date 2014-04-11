@@ -1,6 +1,6 @@
 <?php
 
-class MenuRelationRoleModel extends Model{
+class MenuRelationRoleModel extends ActiveRecord{
     public $tableName = "menu_relation_role";
     public $_pripary = "";
     protected function rules(){

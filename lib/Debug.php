@@ -40,7 +40,7 @@ $debug = Bee::get('debug');
         <div class="debug_head">页面执行 调试信息</div>
         <table border=0 width=100%>
             <tr align="left" bgcolor=#FFFFFF>
-                <td width="180px">
+                <td width="220px">
                     <span class="debug_title">执行时间：</span><span class="debug_value"><?php echo $runTime; ?>(s)</span>
                 </td>
                 <td>
@@ -57,10 +57,10 @@ $debug = Bee::get('debug');
                 $totalTime += $v['time'];
                 ?>
                 <tr align="left" bgcolor=#FFFFFF>
-                    <td width="180px;">
+                    <td width="220px;">
                         <span class="debug_title">执行时间：</span><span class="debug_value"><?php echo round($v['time'], 8); ?>(s)</span>
                     </td>
-                    <td width="180px;">
+                    <td width="220px;">
                         <span class="debug_title">累计时间：</span><span class="debug_value"><?php echo round($totalTime, 8); ?>(s)</span>
                     </td>
                     <td>
@@ -83,10 +83,10 @@ $debug = Bee::get('debug');
                     $mem = $v['mem'] < 0 ? 0 : round(($v['mem'] / 1024), 3);
                     ?>
                     <tr align="left" bgcolor=#FFFFFF>
-                        <td width="180px;">
+                        <td width="220px;">
                             <span class="debug_title">执行时间：</span><span class="debug_value"><?php echo round($v['time'], 8); ?>(s)</span>
                         </td>
-                        <td width="180px;">
+                        <td width="220px;">
                             <span class="debug_title">消耗内存：</span><span class="debug_value"><?php echo $mem; ?>k</span>
                         </td>
                         <td>

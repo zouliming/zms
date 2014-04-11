@@ -5,7 +5,7 @@
  * @author bric.shi
  * @create 2013.04.17
  */
-class ActionModel extends Model {
+class ActionModel extends ActiveRecord {
 
     protected function rules() {
         

@@ -5,13 +5,34 @@
  * @author bric.shi
  * @create 2013.04.17
  */
-class MasterModel extends Model {
-
-    protected function rules() {
-        
-    }
-
+class MasterModel extends ActiveRecord {
+    
     public $tableName = "master";
+
+    public function attributeLabels(){
+        return array(
+            'id'=>'id',
+            'name'=>'用户名',
+            'password'=>'密码',
+            'role'=>'角色',
+            'realname'=>'真实姓名',
+            'sex'=>'性别',
+            'dept'=>'部门',
+            'position'=>'职务',
+            'create_time'=>'创建时间',
+            'create_master_id'=>'创建者id',
+            'update_time'=>'修改时间',
+            'update_master_id'=>'修改者id',
+            'enable'=>'1:有效2无效',
+        );
+    }
+    protected function rules() {
+        return array(
+            array('name,password,dept,position','required'),
+            array('create_time,update_time','uint'),
+            array('sex','equal','in'=>array('男','女'))
+        );
+    }
 
     /**
      * 返回后台用户信息
@@ -54,23 +75,6 @@ class MasterModel extends Model {
     public function getMasterNameById($id) {
         $master = $this->db->selectCol("SELECT name FROM " . $this->tableName . " WHERE id=" . $id);
         return $master[0];
-    }
-
-    /**
-     * 更新后台用户
-     * @param unknown_type $where
-     * @param unknown_type $data
-     */
-    public function updateMaster($where, $data) {
-        $this->updateNew($this->tableName, $where, $data);
-    }
-
-    /**
-     * 添加后台用户
-     * @param unknown_type $data
-     */
-    public function addMaster($data) {
-        $this->insertNew($this->tableName, $data);
     }
 
     /**

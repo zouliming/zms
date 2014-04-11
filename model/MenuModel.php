@@ -5,7 +5,7 @@
  * @author bric.shi
  * @create 2013.04.18
  */
-class MenuModel extends Model {
+class MenuModel extends ActiveRecord {
 
     public $tableName = "menu";
     public $_pripary = "id";
@@ -70,11 +70,11 @@ class MenuModel extends Model {
 
     /**
      * 更新菜单项
-     * @param unknown_type $where
      * @param unknown_type $data
+     * @param unknown_type $where
      */
-    public function updateMenu($where, $data) {
-        $this->updateNew($this->tableName, $where, $data);
+    public function updateMenu($data,$where) {
+        $this->update($data,$where);
     }
 
     /**
@@ -90,8 +90,7 @@ class MenuModel extends Model {
      * @param unknown_type $data
      */
     public function setMenus($data) {
-        return $this->insertMany("menu_relation_role", array('menu_id', 'role_id'), $data
-        );
+        return $this->insertMany("menu_relation_role", array('menu_id', 'role_id'), $data);
     }
 
     /**

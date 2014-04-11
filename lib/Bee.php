@@ -1,5 +1,6 @@
 <?
 require_once('Define.php');
+require_once('fun.php');
 /*
  * 这个是核心类
  */
@@ -14,6 +15,12 @@ class Bee {
         
     );
     public function __construct($config) {
+        if(BEE_DEBUG>0){
+            ini_set('display_errors', 1);
+            error_reporting(E_ALL & ~E_NOTICE);
+        }else{
+            error_reporting(0);
+        }
         $this->init();
         $this->configure($config);
         self::$_app = $this;

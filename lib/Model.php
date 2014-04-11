@@ -33,6 +33,14 @@ class Model{
             return isset($this->errors[$atttibute]) ? $this->errors[$atttibute] : "";
         }
     }
+    public function getAttributeLabel($attribute=NULL){
+        $labels = $this->attributeLabels();
+        if($attribute===NULL){
+            return $labels;
+        }else{
+            return $labels[$attribute];
+        }
+    }
     /***************      便捷方法           **************** */
 
     /**
@@ -73,91 +81,17 @@ class Model{
         $sql = 'select  ' . $fields . ' from `' . $this->tableName . '` ' . $where;
         return $this->db->selectCol($sql);
     }
-
-    /**
-     * 插入数据
-     * @param array $data 将要插入的数据 需要键值对应
-     * @return mixed 成功返回最新插入的数据的Id，失败返回false
-     */
-    public function insert($data) {
-        if (!is_array($data) || count($data) == 0)
-            return false;
-        $cols = $values = "";
-        foreach ($data as $key => $val) {
-            $values .= "'" . mysqli_real_escape_string($this->link, $val) . "',";
-            $cols .= "`" . trim($key) . "`,";
-        }
-        $cols = rtrim($cols, ',');
-        $values = rtrim($values, ',');
-        $sql = "INSERT INTO {$this->tableName} ({$cols}) VALUES ({$values})";
-        $result = $this->query($sql);
-        if ($result) {
-            return $this->lastInsertId();
-        } else {
-            return false;
-        }
+    public function insert($data){
+        return $this->db->insert($this->tableName,$data);
     }
-
-    /**
-     * 插入多条表数据
-     * @param array $data 数据数组
-     * @return resource
-     */
-    public function insertMany($data) {
-        if (!is_array($data) || count($data) == 0)
-            return;
-        $values = "";
-        $keys = array_keys($data[0]);
-        $cols = implode('`,`', $keys);
-        foreach ($data as $key => $val) {
-            $values .= "(";
-            foreach ($val as $k => $v) {
-                $values .= "'" . mysqli_real_escape_string($this->link, $v) . "',";
-            }
-            $values = rtrim($values, ',');
-            $values .= "),";
-        }
-        $cols = '`' . $cols . '`';
-        $values = rtrim($values, ',');
-        $sql = "INSERT INTO {$this->tableName} ({$cols}) VALUES {$values}";
-        $result = $this->query($sql);
-        if ($result) {
-            return $this->lastInsertId();
-        } else {
-            return false;
-        }
+    public function insertMany($data){
+        return $this->db->insertMany($this->tableName,$data);
     }
-
-    /**
-     * 更改数据
-     * @param array $data 二维数组
-     * @param String $where where条件语句
-     * @return boolean
-     */
-    public function update($data, $where) {
-        $tem = "";
-        foreach ($data as $k => $v) {
-            $tem .= " `{$k}`='" . mysqli_real_escape_string($this->link, $v) . "',";
-        }
-        $tem = rtrim($tem, ',');
-        $sql = "update " . $this->tableName . "  SET {$tem} WHERE {$where}";
-        $result = $this->query($sql);
-        if ($result) {
-            return $this->affectRows();
-        } else {
-            return false;
-        }
+    public function update($data,$where=""){
+            return $this->db->update($this->tableName,$data,$where);
     }
-
-    /**
-     * 删除数据
-     * @param type $where
-     * @return type
-     */
-    public function delete($where) {
-        $sql = "DELETE from " . $this->tableName . " WHERE " . $where;
-        return $this->execute($sql);
+    public function delete($where){
+            return $this->db->delete($this->tableName,$where);
     }
-    
 }
 ?>

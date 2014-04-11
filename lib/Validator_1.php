@@ -2,7 +2,7 @@
 
 #================================================
 #Version:       1.1.0
-#Author:	liming.zou@vipshop.com
+#Author:		liming.zou@vipshop.com
 #First Release:	2009-02-03 14:54:00
 #Recent Update:	2009-03-26 17:20:00
 #Funcnames:		
@@ -31,43 +31,125 @@ class Validator {
     #	'name1' => array('funcname1', 'funcname2', array('funcname3', funcparam1, funcparam2)),
     #	'name2' => array('funcname1', 'funcname2', array('funcname3', funcparam1, funcparam2)),
     #));
-    #==$va->check(array(
-    #	'funcname1' => array('funcname1', 'funcname2', array('funcname3', funcparam1, funcparam2)),
-    #	'name2' => array('funcname1', 'funcname2', array('funcname3', funcparam1, funcparam2)),
-    #));
 
-    function check($data, $args) {
+    function check($data,$args) {
         if (is_array($args)) {
-            foreach ($args as $arg) {
-                $columnStr = array_shift($arg);
-                $func_name = array_shift($arg);
-                $func_param = $arg ? $arg : array();
-                
-                $columnArr = explode(",", $columnStr);
-                foreach ($columnArr as $column) {
-                    //如果某个字段已经验证不通过，则跳过
-                    if(array_key_exists($column, $this->error)){
-                        continue;
-                    }else{
+            foreach ($args as $name => $check_funcs) {
+                $value = array_key_exists($name, $data) ? $data[$name] : NULL;
+                $this->valid[$name] = $value;
+                $this->form[$name] = $value;
+                $this->error[$name] = '';
+                if (is_array($check_funcs)) {
+                    foreach ($check_funcs as $check_func) {
+                        $func_name;
+                        $func_param;
+                        if (is_array($check_func) && count($check_func) > 1) {
+                            $func_name = array_shift($check_func);
+                            if (!is_string($func_name)) {
+                                die("VALIDATOR $name CHECK_FUNCS ERROR");
+                            }
+                            $func_param = $check_func;
+                        } elseif (is_string($check_func)) {
+                            $func_name = $check_func;
+                            $func_param = array();
+                        } else {
+                            die("VALIDATOR $name CHECK_FUNCS ERROR");
+                        }
                         if (method_exists($this, $func_name)) {
-                            $info = call_user_func(array($this, $func_name), $data[$column], $func_param);
-                            $is_succ = $info[0];
-                            $error_msg = isset($info[1]) ? $info[1] : FALSE;
-                            if($is_succ==FALSE){
-                                $this->error[$column] = $error_msg;
+                            if (is_array($value)) {
+                                foreach ($value as $index => $val) {
+                                    $info = call_user_func(array($this, $func_name), $val, $func_param);
+                                    $is_succ = $info[0];
+                                    $error_msg = isset($info[1]) ? $info[1] : FALSE;
+                                    $modified_value = isset($info[2]) ? $info[2] : FALSE;
+                                    if ($is_succ === FALSE) {
+                                        break;
+                                    } elseif ($modified_value !== FALSE) {
+                                        $value[$index] = $modified_value;
+                                        $this->valid[$name][$index] = $modified_value;
+                                    }
+                                }
+                            } else {
+                                $info = call_user_func(array($this, $func_name), $value, $func_param);
+                                $is_succ = $info[0];
+                                $error_msg = isset($info[1]) ? $info[1] : FALSE;
+                                $modified_value = isset($info[2]) ? $info[2] : FALSE;
+                                if ($is_succ === TRUE && $modified_value !== FALSE) {
+                                    $value = $modified_value;
+                                    $this->valid[$name] = $modified_value;
+                                }
+                            }
+                            if ($is_succ === FALSE) {
+                                $this->success = 0;
+                                $this->valid[$name] = FALSE;
+                                $this->error[$name] = $error_msg;
+                                break;
                             }
                         } else {
-                            throw new Exception('VALIDATOR FUNCITON :' . $func_name . ' NOT EXISTS');
+                            die("VALIDATOR $name CHECK_FUNC $func_name NOT_EXISTS");
                         }
                     }
-                }
-                if(!empty($this->error)){
-                    $this->success = FALSE;
-                    break;
+                } else {
+                    die("VALIDATOR $name CHECK_FUNCS ERROR");
                 }
             }
         } else {
-            throw new Exception('MODEL RULES IS NOT AN ARRAY');
+            die("VALIDATOR PARAM ERROR");
+        }
+    }
+
+    #================检验变量的方法（变量可以是数组）================
+    #==$va = new Validator();
+    #==$variable = $va->vCheck($variable, array('funcname1', 'funcname2', array('funcname3', funcparam1, funcparam2)));
+
+    function vCheck($variable, $check_funcs) {
+        if (is_array($check_funcs)) {
+            foreach ($check_funcs as $check_func) {
+                $func_name;
+                $func_param;
+                if (is_array($check_func) && count($check_func) > 1) {
+                    $func_name = array_shift($check_func);
+                    if (!is_string($func_name)) {
+                        die("VALIDATOR CHECK_FUNCS ERROR");
+                    }
+                    $func_param = $check_func;
+                } elseif (is_string($check_func)) {
+                    $func_name = $check_func;
+                    $func_param = array();
+                } else {
+                    die("VALIDATOR CHECK_FUNCS ERROR");
+                }
+                if (method_exists($this, $func_name)) {
+                    if (is_array($variable)) {
+                        foreach ($variable as $index => $val) {
+                            $info = call_user_func(array($this, $func_name), $val, $func_param);
+                            $is_succ = $info[0];
+                            $error_msg = isset($info[1]) ? $info[1] : FALSE;
+                            $modified_value = isset($info[2]) ? $info[2] : FALSE;
+                            if ($is_succ === FALSE) {
+                                return FALSE;
+                            } elseif ($modified_value !== FALSE) {
+                                $variable[$index] = $modified_value;
+                            }
+                        }
+                    } else {
+                        $info = call_user_func(array($this, $func_name), $variable, $func_param);
+                        $is_succ = $info[0];
+                        $modified_value = isset($info[2]) ? $info[2] : FALSE;
+                        if ($is_succ === TRUE && $modified_value !== FALSE) {
+                            $variable = $modified_value;
+                        }
+                    }
+                    if ($is_succ === FALSE) {
+                        return FALSE;
+                    }
+                } else {
+                    die("VALIDATOR CHECK_FUNC $func_name NOT_EXISTS");
+                }
+            }
+            return $variable;
+        } else {
+            die("VALIDATOR PARAM ERROR");
         }
     }
 
@@ -141,8 +223,8 @@ class Validator {
     #	'name' => array(array('eq', 'param1', 'param2')),
     #));
 
-    private function equal($value, $func_param) {
-        if (in_array($value, $func_param['in']) || empty($value) && $value !== "0") {
+    private function eq($value, $func_param) {
+        if (in_array($value, $func_param) || empty($value) && $value !== "0") {
             return array(TRUE);
         }
         return array(FALSE, '输入不正确');
